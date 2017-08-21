@@ -38,6 +38,9 @@ namespace v2rayN.Handler
 
                 //Mux
                 config.muxEnabled = true;
+
+                //默认监听端口
+                config.pacPort = 8888;
             }
 
             //本地监听
@@ -50,6 +53,21 @@ namespace v2rayN.Handler
                 inItem.udpEnabled = true;
 
                 config.inbound.Add(inItem);
+
+                //inItem = new InItem();
+                //inItem.protocol = "http";
+                //inItem.localPort = 1081;
+                //inItem.udpEnabled = true;
+
+                //config.inbound.Add(inItem);
+            }
+            else
+            {
+                //http协议不由core提供,只保留socks
+                if (config.inbound.Count > 0)
+                {
+                    config.inbound[0].protocol = "socks";
+                }
             }
             //路由规则
             if (config.useragent == null)
@@ -63,6 +81,24 @@ namespace v2rayN.Handler
             if (config.userblock == null)
             {
                 config.userblock = new List<string>();
+            }
+            //kcp
+            if (config.kcpItem == null)
+            {
+                config.kcpItem = new KcpItem();
+                config.kcpItem.mtu = 1350;
+                config.kcpItem.tti = 50;
+                config.kcpItem.uplinkCapacity = 12;
+                config.kcpItem.downlinkCapacity = 100;
+                config.kcpItem.readBufferSize = 2;
+                config.kcpItem.writeBufferSize = 2;
+                config.kcpItem.congestion = false;
+            }
+
+            // 如果是用户升级，首次会有端口号为0的情况，不可用，这里处理
+            if (config.pacPort == 0)
+            {
+                config.pacPort = 8888;
             }
 
             if (config == null

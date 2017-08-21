@@ -61,14 +61,19 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Gma.QrCodeNet.Encoding, Version=0.4.0.0, Culture=neutral, PublicKeyToken=e8a75d24b142be49, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Gma.QrCodeNet.Encoding.dll</HintPath>
       <Private>False</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Server.Common, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonValue.0.6.0\lib\40\Microsoft.Server.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>.\Newtonsoft.Json.dll</HintPath>
@@ -86,7 +91,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handler\PACFileWatcherHandle.cs" />
+    <Compile Include="Handler\PrivoxyHandler.cs" />
+    <Compile Include="Handler\PACListHandle.cs" />
+    <Compile Include="Handler\PACServerHandle.cs" />
+    <Compile Include="Handler\SysProxyHandle.cs" />
+    <Compile Include="Handler\SystemProxyHandle.cs" />
     <Compile Include="Mode\EMove.cs" />
+    <Compile Include="Mode\SysproxyConfig.cs" />
+    <Compile Include="StringEx.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tool\CDateTime.cs" />
     <Compile Include="Forms\AddServerForm.cs">
       <SubType>Form</SubType>
@@ -130,6 +145,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\FileManager.cs" />
+    <Compile Include="Tool\Job.cs" />
     <Compile Include="Tool\UI.cs" />
     <Compile Include="Tool\Utils.cs" />
     <Compile Include="Handler\V2rayConfigHandler.cs" />
@@ -167,6 +184,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\abp.js.gz" />
+    <None Include="Resources\pac.txt.gz" />
+    <None Include="Resources\sysproxy.exe.gz" />
+    <None Include="Resources\sysproxy64.exe.gz" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="v2ray.ico" />
@@ -207,6 +228,8 @@
     <EmbeddedResource Include="Sample\SampleServerConfig.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\mgwz.dll.gz" />
+    <None Include="Resources\privoxy.exe.gz" />
     <None Include="Resources\restart.png" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +243,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Gma.QrCodeNet.Encoding.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\privoxy_conf.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -74,6 +74,18 @@ namespace v2rayN.Mode
         /// </summary>
         public bool sysAgentEnabled { get; set; }
 
+        public KcpItem kcpItem { get; set; }
+
+        /// <summary>
+        /// PAC监听端口号
+        /// </summary>
+        public int pacPort { get; set; }
+
+        /// <summary>
+        /// 监听状态 0-不改变 1-全局 2-PAC
+        /// </summary>
+        public int listenerType { get; set; }
+
         #region 函数
 
         public string address()
@@ -231,5 +243,38 @@ namespace v2rayN.Mode
         /// 允许udp
         /// </summary>
         public bool udpEnabled { get; set; }
+    }
+
+    [Serializable]
+    public class KcpItem
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public int mtu { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int tti { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int uplinkCapacity { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int downlinkCapacity { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool congestion { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int readBufferSize { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int writeBufferSize { get; set; }
     }
 }

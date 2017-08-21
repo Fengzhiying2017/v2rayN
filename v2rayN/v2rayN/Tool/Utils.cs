@@ -4,12 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using v2rayN.Handler;
+using v2rayN.Mode;
 
 namespace v2rayN
 {
@@ -359,7 +363,7 @@ namespace v2rayN
         /// <returns></returns>
         public static string GetPath(string fileName)
         {
-            string StartupPath = System.Windows.Forms.Application.StartupPath;
+            string StartupPath = Application.StartupPath;
             if (Utils.IsNullOrEmpty(fileName))
             {
                 return StartupPath;
@@ -493,6 +497,73 @@ namespace v2rayN
             {
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// 获取http代理端口号
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static int GetHttpPortNum(Config config)
+        {
+            //var httpProxy = config.inbound.FirstOrDefault(x => x.protocol == "http");
+            //if (httpProxy != null)
+            //{
+            //    return httpProxy.localPort;
+            //}
+            if (PrivoxyHandler.Instance.IsRunning)
+            {
+                return PrivoxyHandler.Instance.RunningPort;
+            }
+            return -1;
+        }
+
+        #endregion
+
+        #region TempPath
+
+        private static string _tempPath = null;
+
+        // return path to store temporary files
+        public static string GetTempPath()
+        {
+            if (_tempPath == null)
+            {
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "v2ray_win_temp"));
+                // don't use "/", it will fail when we call explorer /select xxx/ss_win_temp\xxx.log
+                _tempPath = Path.Combine(Application.StartupPath, "v2ray_win_temp");
+            }
+            return _tempPath;
+        }
+
+        public static string GetTempPath(string filename)
+        {
+            return Path.Combine(GetTempPath(), filename);
+        }
+
+        public static void ClearTempPath()
+        {
+            //Directory.Delete(GetTempPath(), true);
+            //_tempPath = null;
+        }
+
+        public static string UnGzip(byte[] buf)
+        {
+            byte[] buffer = new byte[1024];
+            int n;
+            using (MemoryStream sb = new MemoryStream())
+            {
+                using (GZipStream input = new GZipStream(new MemoryStream(buf),
+                    CompressionMode.Decompress,
+                    false))
+                {
+                    while ((n = input.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        sb.Write(buffer, 0, n);
+                    }
+                }
+                return System.Text.Encoding.UTF8.GetString(sb.ToArray());
+            }
         }
 
         #endregion
